@@ -1,10 +1,21 @@
 class tcp_base{
-private:
-  void close_check();
 public:
-  tcp_base(const char server_ip[], int port);
-  void connect();
+  tcp_base();
   void send(char *pdata);
-  void recv();
-  void close();
+  char* recv();
+  void connect_close();
+  void system_close();
+};
+
+class tcp_client : public tcp_base{
+public:
+  tcp_client(const char server_ip[], int port);
+  void connect();
+};
+
+class tcp_server : public tcp_base{
+public:
+  tcp_server(int port);
+  void listen();
+  void server_close();
 };
