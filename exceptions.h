@@ -1,10 +1,12 @@
-class isClosed_exception{
-public:
-  isClosed_exception();
-};
+#include <iostream>
+#include <exception>
+using namespace std;
 
-class winsock_exception{
+class winsock_exception : public exception{
 public:
-  winsock_exception(int code);
-  int getErrorCode();
+  int error_code;
+  winsock_exception(int code):exception(){error_code = code;}
+  int getErrorCode(){
+    return error_code;
+  }
 };
