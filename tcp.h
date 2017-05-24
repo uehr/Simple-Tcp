@@ -6,13 +6,14 @@ protected:
   SOCKET connect_socket;
   fd_set fds, readfds;
   struct sockaddr_in dest;
-  int result,sended_bit,recved_bit;
+  int result;
   char send_end_symbol,buff;
-  int word_count;
 public:
   tcp_base();
-  void send(char pdata[]);
+  void send(char cdata[]);
   void recv(char in_recv[],int array_size);
+  void psend(char* pdata);
+  void precv(char* in_recv,int var_size);
   void connect_close();
   void system_close();
   ~tcp_base();

@@ -20,11 +20,11 @@ tcp_base::tcp_base(){
   FD_SET(connect_socket,&readfds);
 }
 
-void tcp_base::send(char pdata[]){
-  if(!pdata){ return; }
-  for(int i=0; pdata[i]; i++){
-    if(pdata[i] != send_end_symbol){
-      result = ::send(connect_socket, &pdata[i], sizeof(1), 0);
+void tcp_base::send(char cdata[]){
+  if(!cdata){ return; }
+  for(int i=0; cdata[i]; i++){
+    if(cdata[i] != send_end_symbol){
+      result = ::send(connect_socket, &cdata[i], sizeof(1), 0);
       if (result == SOCKET_ERROR)
       throw winsock_exception(GetLastError());
       Sleep(10);
@@ -37,7 +37,6 @@ void tcp_base::send(char pdata[]){
 
 void tcp_base::recv(char in_recv[],int array_size){
   memset(in_recv,'\0',array_size);
-  word_count = 0;
   buff = '\0';
   memcpy(&fds,&readfds,sizeof(fd_set));
   select(0,&fds,NULL,NULL,NULL);
@@ -48,6 +47,21 @@ void tcp_base::recv(char in_recv[],int array_size){
     if(buff != send_end_symbol)
       in_recv[x] = buff;
   }
+}
+
+void tcp_base::psend(char* pdata){
+  if(!pdata){ return; }
+    result = ::send(connect_socket, pdata, sizeof(pdata), 0);
+  if (result == SOCKET_ERROR)
+    throw winsock_exception(GetLastError());
+}
+
+void tcp_base::precv(char* in_recv,int var_size){
+  memcpy(&fds,&readfds,sizeof(fd_set));
+  select(0,&fds,NULL,NULL,NULL);
+  result = ::recv(connect_socket, in_recv, sizeof(var_size), 0);
+  if(result == SOCKET_ERROR)
+    throw winsock_exception(GetLastError());
 }
 
 void tcp_base::connect_close(){
